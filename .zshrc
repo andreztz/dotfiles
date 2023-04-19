@@ -134,7 +134,7 @@ path_dirs=(
 )
 
 for dir in "${path_dirs[@]}"; do
-    if [ -d "$dir"]; then
+    if [ -d "$dir" ]; then
         path+=("$dir")
     fi
 done

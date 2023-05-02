@@ -33,7 +33,7 @@ alias dotfiles="/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 alias set_dot_env="set -o allexport; source .env; set +o allexport"
 alias py="python"
 alias vim="nvim"
-# alias history="history -t '%d/%m/%y %H:%M'"
+alias history="history -t '%d/%m/%y %H:%M' 1"
 
 # PATH
 path_dirs=(

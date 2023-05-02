@@ -33,7 +33,7 @@ alias dotfiles="/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 alias set_dot_env="set -o allexport; source .env; set +o allexport"
 alias py="python"
 alias vim="nvim"
-alias history="history -t '%d/%m/%y %H:%M'"
+# alias history="history -t '%d/%m/%y %H:%M'"
 
 # PATH
 path_dirs=(
@@ -51,16 +51,7 @@ typeset -U PATH path
 # exporta para sub-process (make it inherited by child processes)
 export PATH
 
-# Prompt
-# vcs_info: informações do repositório git
-autoload -Uz vcs_info
-zstyle ':vcs_info:git:*' formats '%b '
-setopt PROMPT_SUBST
-# %f e %F são codigos de escape, usados para definir cor
-# %n - nome de usuário
-# %m - nome do computador
-# %d e %~ - CWD
-PROMPT='%F{cyan}[ %f%F{cyan}%*%f %F{cyan}%n@%m ] %f%F{blue}%d%f %F{red}${vcs_info_msg_0_}%f$ '
+
 
 # Python virtualenv auto activate
 function activate_virtualenv () {
@@ -142,3 +133,27 @@ if [[ -n "$SSH_CONNECTION" ]]; then
     # Editor preferido
     export EDITOR='nvim'
 fi
+
+# Prompt
+
+# Define um tema
+prompt_mytheme_setup () {
+    # PROMPT == PS1
+    # RPROMPT == RPS1
+    PS1='%F{cyan}%n@%m %f%F{blue}%~%f %F{red}${vcs_info_msg_0_}%f$ '
+    RPS1='%F{cyan}%*%f - %F{yellow}%?%f'
+}
+
+
+# vcs_info: informações do repositório git
+autoload -Uz vcs_info
+zstyle ':vcs_info:git:*' formats '%b '
+setopt PROMPT_SUBST
+# %f e %F são codigos de escape, usados para definir cor
+# %n - nome de usuário
+# %m - nome do computador
+# %d e %~ - CWD
+autoload -Uz promptinit && promptinit
+
+prompt_themes+=( mytheme )
+prompt mytheme

@@ -135,25 +135,51 @@ if [[ -n "$SSH_CONNECTION" ]]; then
 fi
 
 # Prompt
-
+# # https://wiki.archlinux.org/title/Zsh#Prompt_themes
 # Define um tema
 prompt_mytheme_setup () {
+    # %f e %F são codigos de escape, usados para definir cor
+    # %n - nome de usuário
+    # %m - nome do computador
+    # %d e %~ - CWD
     # PROMPT == PS1
     # RPROMPT == RPS1
     PS1='%F{cyan}%n@%m %f%F{blue}%~%f %F{red}${vcs_info_msg_0_}%f$ '
     RPS1='%F{cyan}%*%f - %F{yellow}%?%f'
 }
 
-
 # vcs_info: informações do repositório git
 autoload -Uz vcs_info
 zstyle ':vcs_info:git:*' formats '%b '
 setopt PROMPT_SUBST
-# %f e %F são codigos de escape, usados para definir cor
-# %n - nome de usuário
-# %m - nome do computador
-# %d e %~ - CWD
-autoload -Uz promptinit && promptinit
 
+autoload -Uz promptinit && promptinit
 prompt_themes+=( mytheme )
 prompt mytheme
+
+# PLugins
+# https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/gitignore/gitignore.plugin.zsh
+
+function gi() { curl -fLw '\n' https://www.gitignore.io/api/"${(j:,:)@}" }
+
+_gitignoreio_get_command_list() {
+  curl -sfL https://www.gitignore.io/api/list | tr "," "\n"
+}
+
+_gitignoreio () {
+  compset -P '*,'
+  compadd -S '' `_gitignoreio_get_command_list`
+}
+
+compdef _gitignoreio gi
+
+# PYENV
+# Aponta para odiretorio de instalação do pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+# Verifica se o comando pyenv está disponivel no sistema
+if command -v pyenv 1>/dev/null 2>&1; then
+ eval "$(pyenv init --path)" 
+fi
+
+eval "$(pyenv virtualenv-init -)"

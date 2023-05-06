@@ -1,31 +1,110 @@
-# Caching autocompletion
 zstyle ':completion:*' accept-exact '*(N)'
 zstyle ':completion:*' use-cache on
 zstyle ':completion:*' cache-path ~/.zsh/cache
+# If you come from bash you might have to change your $PATH.
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-# Lines configured by zsh-newuser-install
-# `history -p` limpa o histórico de comandos
-HISTFILE=~/.histfile
-# Número maximo de comandos que serão mantidos ni histórico
-HISTSIZE=10000
-# Define o número máximo de comandos que serão salvos no histórico 
-SAVEHIST=10000
+# Path to your oh-my-zsh installation.
+export ZSH="$HOME/.oh-my-zsh"
 
-setopt autocd beep extendedglob nomatch notify
+# Set name of the theme to load --- if set to "random", it will
+# load a random theme each time oh-my-zsh is loaded, in which case,
+# to know which specific one was loaded, run: echo $RANDOM_THEME
+# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
+ZSH_THEME="robbyrussell"
+
+# Set list of themes to pick from when loading at random
+# Setting this variable when ZSH_THEME=random will cause zsh to load
+# a theme from this variable instead of looking in $ZSH/themes/
+# If set to an empty array, this variable will have no effect.
+# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
+
+# Uncomment the following line to use case-sensitive completion.
+# CASE_SENSITIVE="true"
+
+# Uncomment the following line to use hyphen-insensitive completion.
+# Case-sensitive completion must be off. _ and - will be interchangeable.
+# HYPHEN_INSENSITIVE="true"
+
+# Uncomment one of the following lines to change the auto-update behavior
+# zstyle ':omz:update' mode disabled  # disable automatic updates
+# zstyle ':omz:update' mode auto      # update automatically without asking
+# zstyle ':omz:update' mode reminder  # just remind me to update when it's time
+
+# Uncomment the following line to change how often to auto-update (in days).
+# zstyle ':omz:update' frequency 13
+
+# Uncomment the following line if pasting URLs and other text is messed up.
+# DISABLE_MAGIC_FUNCTIONS="true"
+
+# Uncomment the following line to disable colors in ls.
+# DISABLE_LS_COLORS="true"
+
+# Uncomment the following line to disable auto-setting terminal title.
+# DISABLE_AUTO_TITLE="true"
+
+# Uncomment the following line to enable command auto-correction.
+# ENABLE_CORRECTION="true"
+
+# Uncomment the following line to display red dots whilst waiting for completion.
+# You can also set it to another string to have that shown instead of the default red dots.
+# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
+# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
+# COMPLETION_WAITING_DOTS="true"
+
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+# Uncomment the following line if you want to change the command execution time
+# stamp shown in the history command output.
+# You can set one of the optional three formats:
+# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# or set a custom format using the strftime function format specifications,
+# see 'man strftime' for details.
+# HIST_STAMPS="mm/dd/yyyy"
+
+# Would you like to use another custom folder than $ZSH/custom?
+# ZSH_CUSTOM=/path/to/new-custom-folder
+
+# Which plugins would you like to load?
+# Standard plugins can be found in $ZSH/plugins/
+# Custom plugins may be added to $ZSH_CUSTOM/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
+plugins=(git gitignore docker-compose)
+
+source $ZSH/oh-my-zsh.sh
+
+# User configuration
+
+# export MANPATH="/usr/local/man:$MANPATH"
+
 # You may need to manually set your language environment
+# export LANG=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 export TERM=xterm-256color
 export COLORTERM=truecolor
-# habilita o modo vi
-# bindkey -v
-# habilita o modo emacs
-bindkey -e
-# The following lines were added by compinstall
-zstyle :compinstall filename '/home/ztz/.zshrc'
-autoload -Uz compinit
-compinit
-# End of lines added by compinstall
+# Preferred editor for local and remote sessions
+# if [[ -n $SSH_CONNECTION ]]; then
+#   export EDITOR='vim'
+# else
+#   export EDITOR='mvim'
+# fi
+
+# Compilation flags
+# export ARCHFLAGS="-arch x86_64"
+
+# Set personal aliases, overriding those provided by oh-my-zsh libs,
+# plugins, and themes. Aliases can be placed here, though oh-my-zsh
+# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# For a full list of active aliases, run `alias`.
+#
+# Example aliases
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # Aliases
 alias x=exit
@@ -33,27 +112,32 @@ alias dotfiles="/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 alias set_dot_env="set -o allexport; source .env; set +o allexport"
 alias py="python"
 alias vim="nvim"
-alias history="history -t '%d/%m/%y %H:%M' 1"
+
+
 
 # PATH
+# https://wiki.archlinux.org/index.php/zsh#Configuring_$PATH
 path_dirs=(
     "$HOME/.local/bin"
     "$HOME/.scripts"
+    "$HOME/.poetry/bin"
+    "$HOME/.gem/ruby/3.0.0/bin"
 )
+
 for dir in "${path_dirs[@]}"; do
     if [ -d "$dir" ]; then
         path+=("$dir")
     fi
 done
 
-# Remove caminhos duplicados no PATH
+
+
+# Remove duplicates in path
 typeset -U PATH path
-# exporta para sub-process (make it inherited by child processes)
+# export to sub-process (make it inherited by child processes)
 export PATH
 
-
-
-# Python virtualenv auto activate
+# Detecta e ativa virtualenv Python
 function activate_virtualenv () {
     if [[ -d .venv ]]; then
         source .venv/bin/activate
@@ -61,117 +145,6 @@ function activate_virtualenv () {
         hatch shell
     fi
 }
-# Define hooks
-# Hook precmd: É executado antes de qualquer comando
-precmd() {
-    vcs_info
-}
-# Hook chpwd: É executado ao alterar o diretório corrente
-chpwd() {
-    activate_virtualenv
-}
-
-# TODO: source ~/.zkbd/mapping
-# create a zkbd compatible hash;
-# to add other keys to this hash, see: man 5 terminfo
-typeset -g -A key
-
-key[Home]="${terminfo[khome]}"
-key[End]="${terminfo[kend]}"
-key[Insert]="${terminfo[kich1]}"
-key[Backspace]="${terminfo[kbs]}"
-key[Delete]="${terminfo[kdch1]}"
-key[Up]="${terminfo[kcuu1]}"
-key[Down]="${terminfo[kcud1]}"
-key[Left]="${terminfo[kcub1]}"
-key[Right]="${terminfo[kcuf1]}"
-key[PageUp]="${terminfo[kpp]}"
-key[PageDown]="${terminfo[knp]}"
-key[Shift-Tab]="${terminfo[kcbt]}"
-# Fix: Mapeamento de teclas de seta, para corrigir a
-# a funcionalidade ao `CTRL + LEFT` ou `CTRL + RIGHT`.
-key[Control-Left]="${terminfo[kLFT5]}"
-key[Control-Right]="${terminfo[kRIT5]}"
-
-# setup key accordingly
-[[ -n "${key[Home]}"          ]] && bindkey -- "${key[Home]}"           beginning-of-line
-[[ -n "${key[End]}"           ]] && bindkey -- "${key[End]}"            end-of-line
-[[ -n "${key[Insert]}"        ]] && bindkey -- "${key[Insert]}"         overwrite-mode
-[[ -n "${key[Backspace]}"     ]] && bindkey -- "${key[Backspace]}"      backward-delete-char
-[[ -n "${key[Delete]}"        ]] && bindkey -- "${key[Delete]}"         delete-char
-[[ -n "${key[Up]}"            ]] && bindkey -- "${key[Up]}"             up-line-or-history
-[[ -n "${key[Down]}"          ]] && bindkey -- "${key[Down]}"           down-line-or-history
-[[ -n "${key[Left]}"          ]] && bindkey -- "${key[Left]}"           backward-char
-[[ -n "${key[Right]}"         ]] && bindkey -- "${key[Right]}"          forward-char
-[[ -n "${key[PageUp]}"        ]] && bindkey -- "${key[PageUp]}"         beginning-of-buffer-or-history
-[[ -n "${key[PageDown]}"      ]] && bindkey -- "${key[PageDown]}"       end-of-buffer-or-history
-[[ -n "${key[Shift-Tab]}"     ]] && bindkey -- "${key[Shift-Tab]}"      reverse-menu-complete
-# Fix: Mapeamento de teclas de seta, para corrigir a
-# a funcionalidade ao `CTRL + LEFT` ou `CTRL + RIGHT`.
-[[ -n "${key[Control-Left]}"  ]] && bindkey -- "${key[Control-Left]}"   backward-word
-[[ -n "${key[Control-Right]}" ]] && bindkey -- "${key[Control-Right]}"  forward-word
-
-# Finally, make sure the terminal is in application mode, when zle is
-# active. Only then are the values from $terminfo valid.
-if (( ${+terminfo[smkx]} && ${+terminfo[rmkx]} )); then
-	autoload -Uz add-zle-hook-widget
-	function zle_application_mode_start { echoti smkx }
-	function zle_application_mode_stop { echoti rmkx }
-	add-zle-hook-widget -Uz zle-line-init zle_application_mode_start
-	add-zle-hook-widget -Uz zle-line-finish zle_application_mode_stop
-fi
-
-autoload -Uz up-line-or-beginning-search down-line-or-beginning-search
-zle -N up-line-or-beginning-search
-zle -N down-line-or-beginning-search
-
-[[ -n "${key[Up]}"   ]] && bindkey -- "${key[Up]}"   up-line-or-beginning-search
-[[ -n "${key[Down]}" ]] && bindkey -- "${key[Down]}" down-line-or-beginning-search
-
-# Setup para sessões remotas SSH
-if [[ -n "$SSH_CONNECTION" ]]; then
-    # Editor preferido
-    export EDITOR='nvim'
-fi
-
-# Prompt
-# # https://wiki.archlinux.org/title/Zsh#Prompt_themes
-# Define um tema
-prompt_mytheme_setup () {
-    # %f e %F são codigos de escape, usados para definir cor
-    # %n - nome de usuário
-    # %m - nome do computador
-    # %d e %~ - CWD
-    # PROMPT == PS1
-    # RPROMPT == RPS1
-    PS1='%F{cyan}%n@%m %f%F{blue}%~%f %F{red}${vcs_info_msg_0_}%f$ '
-    RPS1='%F{cyan}%*%f - %F{yellow}%?%f'
-}
-
-# vcs_info: informações do repositório git
-autoload -Uz vcs_info
-zstyle ':vcs_info:git:*' formats '%b '
-setopt PROMPT_SUBST
-
-autoload -Uz promptinit && promptinit
-prompt_themes+=( mytheme )
-prompt mytheme
-
-# PLugins
-# https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/gitignore/gitignore.plugin.zsh
-
-function gi() { curl -fLw '\n' https://www.gitignore.io/api/"${(j:,:)@}" }
-
-_gitignoreio_get_command_list() {
-  curl -sfL https://www.gitignore.io/api/list | tr "," "\n"
-}
-
-_gitignoreio () {
-  compset -P '*,'
-  compadd -S '' `_gitignoreio_get_command_list`
-}
-
-compdef _gitignoreio gi
 
 # PYENV
 # Aponta para odiretorio de instalação do pyenv
@@ -183,3 +156,14 @@ if command -v pyenv 1>/dev/null 2>&1; then
 fi
 
 eval "$(pyenv virtualenv-init -)"
+
+
+# Define hooks
+# https://zsh.sourceforge.io/Doc/Release/Functions.html
+# Hook precmd: É executado antes de qualquer comando
+precmd() {
+}
+# Hook chpwd: É executado ao alterar o diretório corrente
+chpwd() {
+    activate_virtualenv
+}

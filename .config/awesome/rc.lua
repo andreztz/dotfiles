@@ -22,9 +22,7 @@ require("awful.hotkeys_popup.keys")
 local vicious = require("vicious")
 local executer = require("modules/executer")
 
-
-
--- {{{ Error handling
+-- Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
 if awesome.startup_errors then
@@ -51,20 +49,16 @@ do
         in_error = false
     end)
 end
--- }}}
 
+-- Variable definitions
 HOME = os.getenv("HOME")
-
--- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
 beautiful.init(HOME .. "/.config/awesome/themes/" .. "ztz/theme.lua")
 local launch_command = HOME .. "/.scripts/launcher.sh"
 -- This is used later as the default terminal and editor to run.
 terminal = "kitty"
-editor = os.getenv("EDITOR") or "vim"
+editor = "nvim" or os.getenv("EDITOR")
 editor_cmd = terminal .. " -e " .. editor
-
-
 awful.screen.set_auto_dpi_enabled(true)
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -92,9 +86,8 @@ awful.layout.layouts = {
     awful.layout.suit.corner.sw,
     awful.layout.suit.corner.se,
 }
--- }}}
 
--- {{{ Menu
+-- Menu
 -- Create a launcher widget and a main menu
 myawesomemenu = {
     { "hotkeys",     function() hotkeys_popup.show_help(nil, awful.screen.focused()) end },
@@ -117,19 +110,17 @@ mylauncher = awful.widget.launcher({
 
 -- Menubar configuration
 menubar.utils.terminal = terminal -- Set the terminal for applications that require it
--- }}}
 
 -- Keyboard map indicator and switcher
 mykeyboardlayout = awful.widget.keyboardlayout()
 
--- {{{ Wibar
+-- Wibar
 -- Create a textclock widget
 mytextclock = wibox.widget.textclock()
 
 memwidget = wibox.widget.textbox()
 vicious.cache(vicious.widgets.mem)
 vicious.register(memwidget, vicious.widgets.mem, "$1 ($2MiB/$3MiB)", 13)
-
 
 -- Create a wibox for each screen and add it
 local taglist_buttons = gears.table.join(
@@ -211,17 +202,14 @@ awful.screen.connect_for_each_screen(function(s)
         filter  = awful.widget.taglist.filter.all,
         buttons = taglist_buttons
     }
-
     -- Create a tasklist widget
     s.mytasklist = awful.widget.tasklist {
         screen  = s,
         filter  = awful.widget.tasklist.filter.currenttags,
         buttons = tasklist_buttons
     }
-
     -- Create the wibox
     s.mywibox = awful.wibar({ position = "top", screen = s })
-
     -- Add widgets to the wibox
     s.mywibox:setup {
         layout = wibox.layout.align.horizontal,
@@ -243,19 +231,15 @@ awful.screen.connect_for_each_screen(function(s)
         },
     }
 end)
--- }}}
---
 
-
--- {{{ Mouse bindings
+-- Mouse bindings
 root.buttons(gears.table.join(
     awful.button({}, 3, function() mymainmenu:toggle() end),
     awful.button({}, 4, awful.tag.viewnext),
     awful.button({}, 5, awful.tag.viewprev)
 ))
--- }}}
 
--- {{{ Key bindings
+-- Key bindings
 globalkeys = gears.table.join(
     awful.key({ modkey, }, "s", hotkeys_popup.show_help,
         { description = "show help", group = "awesome" }),
@@ -324,7 +308,6 @@ globalkeys = gears.table.join(
         { description = "select next", group = "layout" }),
     awful.key({ modkey, "Shift" }, "space", function() awful.layout.inc(-1) end,
         { description = "select previous", group = "layout" }),
-
     awful.key({ modkey, "Control" }, "n",
         function()
             local c = awful.client.restore()
@@ -336,14 +319,11 @@ globalkeys = gears.table.join(
             end
         end,
         { description = "restore minimized", group = "client" }),
-
     -- Prompt
-    -- awful.key({ modkey }, "r", function() awful.screen.focused().mypromptbox:run() end,
-    --     { description = "run prompt", group = "launcher" }),
+    -- awful.key({ modkey }, "r", function() awful.screen.focused().mypromptbox:run() end, { description = "run prompt", group = "launcher" }),
     -- TODO: lançar o rofi com `modkey + space`, necessário encontrar uma comb de teclas
     --  que faça sentido para alterar o tipo de layout. Atualmente o layout é alterado com
     --  as teclas `modkey + space` e `shift + modkey + space`.
-    --
     -- TODO: definir o nome do aplicativo, rofi, no 'hotkeys'.
     awful.key(
         { modkey }, "r", function() awful.spawn(launch_command) end,
@@ -405,7 +385,32 @@ clientkeys = gears.table.join(
             c.maximized_horizontal = not c.maximized_horizontal
             c:raise()
         end,
-        { description = "(un)maximize horizontally", group = "client" })
+        { description = "(un)maximize horizontally", group = "client" }),
+    awful.key({ modkey, "Shift" }, "Left", function(client)
+        client.maximized = false
+        awful.placement.bottom_left(client.focus, {
+            to_percent = 0.5,
+            honor_workarea = true
+        })
+        awful.placement.scale(client.focus, {
+            to_percent = 1,
+            direction = 'up',
+            honor_workarea = true
+        })
+    end, { description = "Position the window on the left half of the screen.", group = "Tiling" }),
+    awful.key({ modkey, "Shift" }, "Right", function(client)
+        client.maximized = false
+        awful.placement.bottom_right(client.focus, {
+            to_percent = 0.5,
+            honor_workarea = true
+        })
+        awful.placement.scale(client.focus, {
+            to_percent = 1,
+            direction = 'up',
+            honor_workarea = true
+        })
+    end, { description = "Position the window on the right half of the screen.", group = "Tiling" }),
+    awful.key({ modkey, "Shift"   }, "Up", awful.placement.centered)
 )
 
 -- Bind all key numbers to tags.
@@ -470,13 +475,17 @@ clientbuttons = gears.table.join(
         c:emit_signal("request::activate", "mouse_click", { raise = true })
         awful.mouse.client.resize(c)
     end)
+-- awful.button({ modkey }, 8, function(c)
+-- end),
+--
+-- awful.button({ modkey }, 9, function(c)
+-- end)
 )
 
 -- Set keys
 root.keys(globalkeys)
--- }}}
 
--- {{{ Rules
+-- Rules
 -- Rules to apply to new clients (through the "manage" signal).
 awful.rules.rules = {
     -- All clients will match this rule.
@@ -550,9 +559,8 @@ awful.rules.rules = {
 
 
 }
--- }}}
 
--- {{{ Signals
+-- Signals
 -- Signal function to execute when a new client appears.
 client.connect_signal("manage", function(c)
     -- Set the windows at the slave,
@@ -643,12 +651,10 @@ end)
 
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
--- }}}
 
 -- Autostart
 -- TODO: encontrar um nome melhor para executor e execute_commands, talvez subprocess.run_once ou autostart.run...
 executer.execute_commands({
     "xcompmgr",
     "flameshot",
-    "nitrogen --restore",
 })

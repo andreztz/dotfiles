@@ -165,4 +165,6 @@ theme.tasklist_bg_focus                         = "#00FF00" -- Define a cor de f
 theme.tasklist_bg_minimize                      = "#FF00FF" -- Define a cor de fundo da barra de tarefas para janelas minimizadas
 
 theme.font                                      = "Ubuntu Mono 12"
+theme.systray_icon_spacing = 8
+
 return theme

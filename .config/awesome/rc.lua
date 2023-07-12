@@ -118,6 +118,28 @@ mykeyboardlayout = awful.widget.keyboardlayout()
 -- Create a textclock widget
 mytextclock = wibox.widget.textclock()
 
+-- Create System Tray widget 
+-- see: https://github.com/awesomeWM/awesome/issues/971
+systray_size = 10
+systray_widget = wibox.widget.systray()
+systray_widget.base_size = systray_size
+systray_widget:set_reverse(true)
+
+local systray_wrapper = wibox.widget {
+    {
+        systray_widget,
+        left = 10,
+        top = 4,
+        bottom = 2,
+        right = 10,
+        widget = wibox.container.margin,
+    },
+    -- bg = "#ff0000", -- uncomment to debug
+    shape = gears.shape.rounded_rect,
+    shape_clip = true,
+    widget = wibox.container.background,
+}
+
 memwidget = wibox.widget.textbox()
 vicious.cache(vicious.widgets.mem)
 vicious.register(memwidget, vicious.widgets.mem, "$1 ($2MiB/$3MiB)", 13)
@@ -178,6 +200,16 @@ end
 screen.connect_signal("property::geometry", set_wallpaper)
 
 awful.screen.connect_for_each_screen(function(s)
+    -- [ ] - Resolver problema de iniciar o System Tray 
+    --       somente no monitor primario ou monitor escolhido.
+
+    -- Pelos meus testes s.index == 2 não resolver o problema do system tray
+    if s.index == 1 then
+        s.primary = true
+    else
+        s.primary = false
+    end
+
     -- Wallpaper
     set_wallpaper(s)
 
@@ -209,27 +241,54 @@ awful.screen.connect_for_each_screen(function(s)
         buttons = tasklist_buttons
     }
     -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top", screen = s })
+    s.mywibox = awful.wibar({
+        position = "top",
+        screen = s,
+        opacity = 1,
+        type = "desktop"
+    })
+
     -- Add widgets to the wibox
-    s.mywibox:setup {
-        layout = wibox.layout.align.horizontal,
-        {
-            -- Left widgets
-            layout = wibox.layout.fixed.horizontal,
-            mylauncher,
-            s.mytaglist,
-            s.mypromptbox,
-        },
-        s.mytasklist, -- Middle widget
-        {
-            -- Right widgets
-            layout = wibox.layout.fixed.horizontal,
-            mykeyboardlayout,
-            wibox.widget.systray(),
-            mytextclock,
-            s.mylayoutbox,
-        },
-    }
+    if (s.primary) then
+        s.mywibox:setup {
+            layout = wibox.layout.align.horizontal,
+            {
+                -- Left widgets
+                layout = wibox.layout.fixed.horizontal,
+                mylauncher,
+                s.mytaglist,
+                s.mypromptbox,
+            },
+            s.mytasklist, -- Middle widget
+            {
+                -- Right widgets
+                layout = wibox.layout.fixed.horizontal,
+                systray_wrapper,
+                mytextclock,
+                s.mylayoutbox,
+            },
+        }
+    else
+        s.mywibox:setup {
+            layout = wibox.layout.align.horizontal,
+            {
+                -- Left widgets
+                layout = wibox.layout.fixed.horizontal,
+                mylauncher,
+                s.mytaglist,
+                s.mypromptbox,
+            },
+            s.mytasklist, -- Middle widget
+            {
+                -- Right widgets
+                layout = wibox.layout.fixed.horizontal,
+                mytextclock,
+                s.mylayoutbox,
+            },
+        }
+
+    end
+
 end)
 
 -- Mouse bindings
@@ -657,4 +716,23 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 executer.execute_commands({
     "xcompmgr",
     "flameshot",
+    "nm-applet",
 })
+
+
+-- -- Signal function to execute when a new client appears.
+-- client.connect_signal("manage", function (c)
+--   -- Set the windows at the slave,
+--   -- i.e. put it at the end of others instead of setting it master.
+--   -- if not awesome.startup then awful.client.setslave(c) end
+--
+--  if awesome.startup and
+--   not c.size_hints.user_position
+--   and not c.size_hints.program_position then
+--     -- Prevent clients from being unreachable after screen count changes.
+--     awful.placement.no_offscreen(c)
+--  end
+-- --
+--  awful.titlebar(c,{size=20})
+--  -- awful.titlebar.hide(c)
+-- end)

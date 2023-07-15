@@ -22,6 +22,18 @@ require("awful.hotkeys_popup.keys")
 local vicious = require("vicious")
 local executer = require("modules/executer")
 
+local _log = require("gears.debug")
+
+-- Exemplo de uso do sistema de log
+-- _log.print_error("Exibe uma mensagem de erro!")
+-- _log.print_warning("Exibe mensagem de aviso!")
+--
+-- Exibe uma tabela
+-- _log.dump({
+--     nome = "Test",
+--     sobrenome = 1
+-- })
+
 -- Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)

@@ -132,25 +132,25 @@ mytextclock = wibox.widget.textclock()
 
 -- Create System Tray widget 
 -- see: https://github.com/awesomeWM/awesome/issues/971
-systray_size = 10
-systray_widget = wibox.widget.systray()
-systray_widget.base_size = systray_size
+local systray_widget = wibox.widget.systray()
 systray_widget:set_reverse(true)
 
 local systray_wrapper = wibox.widget {
     {
         systray_widget,
         left = 10,
-        top = 4,
+        top = 2,
         bottom = 2,
         right = 10,
         widget = wibox.container.margin,
     },
-    -- bg = "#ff0000", -- uncomment to debug
-    shape = gears.shape.rounded_rect,
+    --bg = "#ff0000aa", -- uncomment to debug
+    -- shape = gears.shape.rounded_rect,
     shape_clip = true,
     widget = wibox.container.background,
 }
+-- local systray_wrapper = wibox.widget.systray()
+-- systray_wrapper:set_reverse(true)
 
 memwidget = wibox.widget.textbox()
 vicious.cache(vicious.widgets.mem)
@@ -212,7 +212,7 @@ end
 screen.connect_signal("property::geometry", set_wallpaper)
 
 awful.screen.connect_for_each_screen(function(s)
-    -- [ ] - Resolver problema de iniciar o System Tray 
+    -- [ ] - Resolver problema de iniciar o System Tray
     --       somente no monitor primario ou monitor escolhido.
 
     -- Pelos meus testes s.index == 2 não resolver o problema do system tray
@@ -256,8 +256,8 @@ awful.screen.connect_for_each_screen(function(s)
     s.mywibox = awful.wibar({
         position = "top",
         screen = s,
-        opacity = 1,
-        type = "desktop"
+        opacity = .8,
+        type = "desktop",
     })
 
     -- Add widgets to the wibox
@@ -726,9 +726,10 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 -- Autostart
 -- TODO: encontrar um nome melhor para executor e execute_commands, talvez subprocess.run_once ou autostart.run...
 executer.execute_commands({
-    "xcompmgr",
-    "flameshot",
     "nm-applet",
+    "picom -b",
+    "flameshot",
+    -- "xfce4-clipman", -- TODO: se o ambinete for xfce4 não executar
 })
 
 

@@ -83,30 +83,9 @@ modkey = "Mod4"
 local layouts = require("layouts")
 layouts.setup()
 
---
--- Menu
--- Create a launcher widget and a main menu
-myawesomemenu = {
-    { "hotkeys",     function() hotkeys_popup.show_help(nil, awful.screen.focused()) end },
-    { "manual",      terminal .. " -e man awesome" },
-    { "edit config", editor_cmd .. " " .. awesome.conffile },
-    { "restart",     awesome.restart },
-    { "quit",        function() awesome.quit() end },
-}
 
-mymainmenu = awful.menu({
-    items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-        { "open terminal", terminal }
-    }
-})
-
-mylauncher = awful.widget.launcher({
-    image = beautiful.awesome_icon,
-    menu = mymainmenu
-})
-
--- Menubar configuration
-menubar.utils.terminal = terminal -- Set the terminal for applications that require it
+local menu = require("menu")
+menu.setup()
 
 -- Keyboard map indicator and switcher
 mykeyboardlayout = awful.widget.keyboardlayout()
@@ -252,7 +231,7 @@ awful.screen.connect_for_each_screen(function(s)
             {
                 -- Left widgets
                 layout = wibox.layout.fixed.horizontal,
-                mylauncher,
+                menu_launcher,
                 s.mytaglist,
                 s.mypromptbox,
             },
@@ -271,7 +250,7 @@ awful.screen.connect_for_each_screen(function(s)
             {
                 -- Left widgets
                 layout = wibox.layout.fixed.horizontal,
-                mylauncher,
+                menu_launcher,
                 s.mytaglist,
                 s.mypromptbox,
             },
@@ -290,7 +269,7 @@ end)
 
 -- Mouse bindings
 root.buttons(gears.table.join(
-    awful.button({}, 3, function() mymainmenu:toggle() end),
+    awful.button({}, 3, function() main_menu:toggle() end),
     awful.button({}, 4, awful.tag.viewnext),
     awful.button({}, 5, awful.tag.viewprev)
 ))
@@ -318,7 +297,7 @@ globalkeys = gears.table.join(
         end,
         { description = "focus previous by index", group = "client" }
     ),
-    awful.key({ modkey, }, "w", function() mymainmenu:show() end,
+    awful.key({ modkey, }, "w", function() main_menu:show() end,
         { description = "show main menu", group = "awesome" }),
 
     -- Layout manipulation

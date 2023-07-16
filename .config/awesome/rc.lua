@@ -100,14 +100,6 @@ signals.setup()
 
 
 
--- Autostart
--- TODO: encontrar um nome melhor para executor e execute_commands, talvez subprocess.run_once ou autostart.run...
-executer.execute_commands({
-    "nm-applet",
-    "picom -b",
-    "flameshot",
-    -- "xfce4-clipman", -- TODO: se o ambinete for xfce4 não executar
-})
 
 
 -- -- Signal function to execute when a new client appears.

@@ -1,5 +1,5 @@
 configuration {
-modi: "drun,run,clipboard:greenclip print,pass:'rofi-pass.py',window,ssh,fc:'rofi-font.py',";
+modi: "drun,run,window,ssh,";
 font: "hack 10";
 /*	location: 0;*/
 /*	yoffset: 0;*/

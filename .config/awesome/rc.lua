@@ -97,9 +97,8 @@ rules.setup()
 local signals = require("signals")
 signals.setup()
 
-
-
-
+local autostart = require("autostart")
+autostart.setup()
 
 -- -- Signal function to execute when a new client appears.
 -- client.connect_signal("manage", function (c)

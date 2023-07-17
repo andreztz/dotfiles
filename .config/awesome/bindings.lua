@@ -102,7 +102,7 @@ local function setup()
         --  as teclas `modkey + space` e `shift + modkey + space`.
         -- TODO: definir o nome do aplicativo, rofi, no 'hotkeys'.
         awful.key(
-            { modkey }, "r", function() awful.spawn(launch_command) end,
+            { modkey }, "r", function() awful.spawn("rofi -show") end,
             { description = "Command launcher", group = "launcher" }
         ),
         awful.key({ modkey }, "x",

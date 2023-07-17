@@ -66,7 +66,6 @@ end
 HOME = os.getenv("HOME")
 -- Themes define colours, icons, font and wallpapers.
 beautiful.init(HOME .. "/.config/awesome/themes/" .. "ztz/theme.lua")
-local launch_command = HOME .. "/.scripts/launcher.sh"
 -- This is used later as the default terminal and editor to run.
 terminal = "kitty"
 editor = "nvim" or os.getenv("EDITOR")

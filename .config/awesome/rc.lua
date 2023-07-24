@@ -67,7 +67,7 @@ HOME = os.getenv("HOME")
 -- Themes define colours, icons, font and wallpapers.
 beautiful.init(HOME .. "/.config/awesome/themes/" .. "ztz/theme.lua")
 -- This is used later as the default terminal and editor to run.
-terminal = "alacritty"
+terminal = "kitty"
 editor = "nvim" or os.getenv("EDITOR")
 editor_cmd = terminal .. " -e " .. editor
 awful.screen.set_auto_dpi_enabled(true)

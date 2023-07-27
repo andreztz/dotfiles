@@ -2,6 +2,7 @@ local gears = require("gears")
 local awful = require("awful")
 local wibox = require("wibox")
 local vicious = require("vicious")
+local beautiful = require("beautiful")
 
 
 local function setup()
@@ -105,7 +106,7 @@ local function setup()
         end
 
         -- Wallpaper
-        -- set_wallpaper(s)
+        set_wallpaper(s)
 
         -- Each screen has its own tag table.
         awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" },

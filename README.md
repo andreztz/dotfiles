@@ -4,6 +4,12 @@
 
 Defina variáveis de ambiente no arquivo ~/.zshenv 
 
+```
+# https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
+OH_MY_ZSH_THEME=<NOME DO TEMA>
+```
+
+
 # Config Awesomewm
 
 ```
@@ -26,4 +32,4 @@ tmux source ~/.tmux.conf
 
 ```
 prefix + I
-``` 
+```

@@ -6,6 +6,8 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
 
+local utils = require("utils")
+
 
 local function setup()
     -- Mouse bindings
@@ -163,29 +165,11 @@ local function setup()
             end,
             { description = "(un)maximize horizontally", group = "client" }),
         awful.key({ modkey, "Shift" }, "Left", function(client)
-            client.maximized = false
-            awful.placement.bottom_left(client.focus, {
-                to_percent = 0.5,
-                honor_workarea = true
-            })
-            awful.placement.scale(client.focus, {
-                to_percent = 1,
-                direction = 'up',
-                honor_workarea = true
-            })
-        end, { description = "Position the window on the left half of the screen.", group = "Tiling" }),
+            utils.snap_edge(client, "left")
+        end, {description="Position the window on the left half of the screen.", group="Tiling" }),
         awful.key({ modkey, "Shift" }, "Right", function(client)
-            client.maximized = false
-            awful.placement.bottom_right(client.focus, {
-                to_percent = 0.5,
-                honor_workarea = true
-            })
-            awful.placement.scale(client.focus, {
-                to_percent = 1,
-                direction = 'up',
-                honor_workarea = true
-            })
-        end, { description = "Position the window on the right half of the screen.", group = "Tiling" }),
+            utils.snap_edge(client, "right")
+        end, {description="Position the window on the right half of the screen.", group="Tiling" }),
         awful.key({ modkey, "Shift" }, "Up", awful.placement.centered)
     )
 

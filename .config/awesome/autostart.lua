@@ -4,7 +4,7 @@ local executer = require("modules/executer")
 local function setup()
     -- Autostart
     executer.execute_commands({
-        "picom -b",
+        "xcompmgr",
         "flameshot",
         "volumeicon",
         "nm-applet",

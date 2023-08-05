@@ -1,0 +1,41 @@
+mode = "local"
+project = ""
+shell = "zsh"
+
+[dirs]
+project = []
+python = "isolated"
+data = "/home/ztz/.local/share/hatch"
+cache = "/home/ztz/.cache/hatch"
+
+[dirs.env]
+virtual = ".venv"
+
+[projects]
+
+[publish.index]
+repo = "main"
+
+[template]
+name = "André P. Santos"
+email = "andreztz@gmail.com"
+
+[template.licenses]
+headers = true
+default = [
+    "MIT",
+]
+
+[template.plugins.default]
+tests = true
+ci = false
+src-layout = false
+
+[terminal.styles]
+info = "bold"
+success = "bold cyan"
+error = "bold red"
+warning = "bold yellow"
+waiting = "bold magenta"
+debug = "bold"
+spinner = "simpleDotsScrolling"

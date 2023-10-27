@@ -107,7 +107,8 @@ export COLORTERM=truecolor
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # Aliases
-alias x=exit
+alias x="exit"
+alias xopen="xdg-open"
 alias dotfiles="/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 alias set_dot_env="set -o allexport; source .env; set +o allexport"
 alias py="python"

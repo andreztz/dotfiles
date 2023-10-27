@@ -131,8 +131,6 @@ for dir in "${path_dirs[@]}"; do
     fi
 done
 
-
-
 # Remove duplicates in path
 typeset -U PATH path
 # export to sub-process (make it inherited by child processes)
@@ -140,11 +138,10 @@ export PATH
 
 # Detecta e ativa virtualenv Python
 function activate_virtualenv () {
-    if [[ -d .venv ]]; then
-        source .venv/bin/activate
-    elif [[ -d .hatch ]]; then
-        hatch shell
-    fi
+
+    BASE_NAME=$(basename $PWD)
+    [ -d ".venv" ] && source .venv/bin/activate 2> /dev/null
+    [ -d ".venv/$BASE_NAME" ] && hatch shell 2> /dev/null
 }
 
 # PYENV

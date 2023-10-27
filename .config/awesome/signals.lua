@@ -3,102 +3,153 @@ local awful = require("awful")
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 
-
 local function setup()
-    -- Signals
-    -- Signal function to execute when a new client appears.
-    client.connect_signal("manage", function(c)
-        -- Set the windows at the slave,
-        -- i.e. put it at the end of others instead of setting it master.
-        -- if not awesome.startup then awful.client.setslave(c) end
+	-- Signals
+	-- Signal function to execute when a new client appears.
+	client.connect_signal("manage", function(c)
+		-- Set the windows at the slave,
+		-- i.e. put it at the end of others instead of setting it master.
+		-- if not awesome.startup then awful.client.setslave(c) end
 
-        if awesome.startup
-            and not c.size_hints.user_position
-            and not c.size_hints.program_position then
-            -- Prevent clients from being unreachable after screen count changes.
-            awful.placement.no_offscreen(c)
-        end
-    end)
+		if awesome.startup and not c.size_hints.user_position and not c.size_hints.program_position then
+			-- Prevent clients from being unreachable after screen count changes.
+			awful.placement.no_offscreen(c)
+		end
+	end)
 
-    -- -- Função auxiliar para lidar com evento de duplo clique da barra de titulo
-    local double_click_timer = nil -- Variável para controlar o temporizador de clique duplo
-    local function double_click_event_handler()
-        if double_click_timer then
-            -- O temporizador está ativo, portanto, ação de clique duplo é executada e
-            -- finalmente o valor de retorno é true
-            double_click_timer:stop()
-            double_click_timer = nil
-            return true
-        end
-        --  inicia um novo temporizador de clique duplo, caso não ativo.
-        double_click_timer = gears.timer.start_new(0.20, function()
-            double_click_timer = nil
-            return false
-        end)
-    end
+	-- -- Função auxiliar para lidar com evento de duplo clique da barra de titulo
+	local double_click_timer = nil -- Variável para controlar o temporizador de clique duplo
+	local function double_click_event_handler()
+		if double_click_timer then
+			-- O temporizador está ativo, portanto, ação de clique duplo é executada e
+			-- finalmente o valor de retorno é true
+			double_click_timer:stop()
+			double_click_timer = nil
+			return true
+		end
+		--  inicia um novo temporizador de clique duplo, caso não ativo.
+		double_click_timer = gears.timer.start_new(0.20, function()
+			double_click_timer = nil
+			return false
+		end)
+	end
 
+	-- Add a titlebar if titlebars_enabled is set to true in the rules.
+	client.connect_signal("request::titlebars", function(c)
+		-- buttons for the titlebar
+		local buttons = gears.table.join(
+			awful.button({}, 1, function()
+				c:emit_signal("request::activate", "titlebar", { raise = true })
+				-- Verifica o tipo de evento
+				if double_click_event_handler() then
+					-- Maximiza ou restaura a janela, no duplo clique na barra de titulo.
+					c.maximized = not c.maximized
+				else
+					-- Clique simples na barra de titulo, move a janela.
+					awful.mouse.client.move(c)
+				end
+			end),
+			awful.button({}, 3, function()
+				c:emit_signal("request::activate", "titlebar", { raise = true })
+				awful.mouse.client.resize(c)
+			end)
+		)
 
-    -- Add a titlebar if titlebars_enabled is set to true in the rules.
-    client.connect_signal("request::titlebars", function(c)
-        -- buttons for the titlebar
-        local buttons = gears.table.join(
-            awful.button({}, 1, function()
-                c:emit_signal("request::activate", "titlebar", { raise = true })
-                -- Verifica o tipo de evento
-                if double_click_event_handler() then
-                    -- Maximiza ou restaura a janela, no duplo clique na barra de titulo.
-                    c.maximized = not c.maximized
-                else
-                    -- Clique simples na barra de titulo, move a janela.
-                    awful.mouse.client.move(c)
-                end
-            end),
-            awful.button({}, 3, function()
-                c:emit_signal("request::activate", "titlebar", { raise = true })
-                awful.mouse.client.resize(c)
-            end)
-        )
+		awful.titlebar(c):setup({
+			{
+				-- Left
+				awful.titlebar.widget.iconwidget(c),
+				buttons = buttons,
+				layout = wibox.layout.fixed.horizontal,
+			},
+			{
+				-- Middle
+				{
+					-- Title
+					align = "center",
+					widget = awful.titlebar.widget.titlewidget(c),
+				},
+				buttons = buttons,
+				layout = wibox.layout.flex.horizontal,
+			},
+			{
+				-- Right
+				awful.titlebar.widget.floatingbutton(c),
+				awful.titlebar.widget.maximizedbutton(c),
+				awful.titlebar.widget.stickybutton(c),
+				awful.titlebar.widget.ontopbutton(c),
+				awful.titlebar.widget.closebutton(c),
+				layout = wibox.layout.fixed.horizontal(),
+			},
+			layout = wibox.layout.align.horizontal,
+		})
+	end)
 
-        awful.titlebar(c):setup {
-            {
-                -- Left
-                awful.titlebar.widget.iconwidget(c),
-                buttons = buttons,
-                layout  = wibox.layout.fixed.horizontal
-            },
-            {
-                -- Middle
-                {
-                    -- Title
-                    align  = "center",
-                    widget = awful.titlebar.widget.titlewidget(c)
-                },
-                buttons = buttons,
-                layout  = wibox.layout.flex.horizontal
-            },
-            {
-                -- Right
-                awful.titlebar.widget.floatingbutton(c),
-                awful.titlebar.widget.maximizedbutton(c),
-                awful.titlebar.widget.stickybutton(c),
-                awful.titlebar.widget.ontopbutton(c),
-                awful.titlebar.widget.closebutton(c),
-                layout = wibox.layout.fixed.horizontal()
-            },
-            layout = wibox.layout.align.horizontal
-        }
-    end)
+	-- Plank
+	-- Raises plank only when mouse enter
+	-- client.connect_signal("mouse::enter", function(c)
+	-- 	if c.class == "Plank" then
+	-- 		c.above = true
+	-- 	end
+	-- end)
+	--
+	-- -- Places plank below other clients when mouse leave
+	-- client.connect_signal("mouse::leave", function(c)
+	-- 	if c.class == "Plank" then
+	-- 		c.above = false
+	-- 	end
+	-- end)
+	--
+	--
+	-- local _log = require("gears.debug")
 
-    -- Enable sloppy focus, so that focus follows mouse.
-    client.connect_signal("mouse::enter", function(c)
-        c:emit_signal("request::activate", "mouse_enter", { raise = false })
-    end)
+	-- Exemplo de uso do sistema de log
+	-- _log.print_error("Exibe uma mensagem de erro!")
+	-- _log.print_warning("Exibe mensagem de aviso!")
+	--
+	-- Exibe uma tabela
+	-- _log.dump({
+	--     nome = "Test",
+	--     sobrenome = 1
+	-- })
 
-    client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
-    client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
+	-- Função para exibir a dock
+	-- local function show_dock()
+	-- 	_log.print_warning("Exibe dock!")
+	-- end
+	--
+	-- -- Função para esconder a dock
+	-- local function hide_dock()
+	-- 	_log.print_warning("Esconde dock!")
+	-- end
+	--
+	-- -- Monitora os eventos do mouse
+	-- client.connect_signal("property::geometry", function()
+	-- 	local screen = awful.screen.focused()
+	-- 	local geometry = screen.geometry
+	-- 	local dock_height = 30 -- Ajuste conforme necessário
+	-- 	_log.print_warning("Teste")
+	-- 	-- Verifica se o mouse está na borda inferior da tela
+	-- 	-- if client.coords().y >= (geometry.y + geometry.height - dock_height) then
+	-- 	-- 	show_dock()
+	-- 	-- else
+	-- 	-- 	hide_dock()
+	-- 	-- end
+	-- end)
+
+	-- Enable sloppy focus, so that focus follows mouse.
+	client.connect_signal("mouse::enter", function(c)
+		c:emit_signal("request::activate", "mouse_enter", { raise = false })
+	end)
+
+	client.connect_signal("focus", function(c)
+		c.border_color = beautiful.border_focus
+	end)
+	client.connect_signal("unfocus", function(c)
+		c.border_color = beautiful.border_normal
+	end)
 end
 
-
 return {
-    setup = setup
+	setup = setup,
 }

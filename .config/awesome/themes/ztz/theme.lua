@@ -1,6 +1,10 @@
 -- wombat (matching the vim colorscheme), awesome3 theme, by zhuravlik
 
 --{{{ Main
+--
+local beautiful = require("beautiful")
+local xresources = beautiful.xresources
+local dpi = xresources.apply_dpi
 local awful = require("awful")
 awful.util  = require("awful.util")
 
@@ -53,8 +57,10 @@ theme.bg_urgent                                 = "#34353488"
 -- }}}
 
 -- {{{ Borders
-theme.border_width                              = "1"
---theme.border_width  = "2"
+--
+theme.useless_gap   = dpi(1)
+theme.border_width  = dpi(2)
+-- theme.border_width                              = "2"
 --theme.border_normal = "#34353488"
 --theme.border_normal = "#2d4113"
 --theme.border_normal = "#586c2d"

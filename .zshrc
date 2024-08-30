@@ -35,7 +35,9 @@ ZSH_THEME="${OH_MY_ZSH_THEME:-robbyrussell}"
 # zstyle ':omz:update' frequency 13
 
 # Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS="true"
+# disable url auto-scaping when paste url into the shell
+# https://github.com/ohmyzsh/ohmyzsh/issues/7632
+DISABLE_MAGIC_FUNCTIONS="true"
 
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"

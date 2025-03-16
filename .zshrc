@@ -167,3 +167,5 @@ precmd() {
 chpwd() {
     activate_virtualenv
 }
+
+. "$HOME/.cargo/env"

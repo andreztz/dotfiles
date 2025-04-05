@@ -1,0 +1,12 @@
+[user]
+	email = andreztz@gmail.com
+	name = André P. Santos
+	signingkey = 7F593FA4273F9A30
+[core]
+	editor = nvim
+[init]
+	defaultBranch = main
+[tag]
+	gpgSign = true
+[commit]
+	gpgsign = true

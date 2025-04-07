@@ -9,6 +9,7 @@ Defina variáveis de ambiente no arquivo ~/.zshenv
 OH_MY_ZSH_THEME=<NOME DO TEMA>
 ```
 
+git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
 
 # Config Awesomewm
 

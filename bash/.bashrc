@@ -27,3 +27,4 @@ unset rc
 [ -f "$HOME/.scripts/venv_auto_activate.sh" ] && source ~/.scripts/venv_auto_activate.sh
 
 . "$HOME/.cargo/env"
+export PATH=/home/ztz/.cargo/bin:$PATH

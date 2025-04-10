@@ -169,3 +169,11 @@ chpwd() {
 }
 
 . "$HOME/.cargo/env"
+
+
+# uv
+. "$HOME/.local/share/../bin/env"
+# uv autocopletion
+eval "$(uv generate-shell-completion zsh)"
+# uvx autocompletion
+eval "$(uvx --generate-shell-completion zsh)"

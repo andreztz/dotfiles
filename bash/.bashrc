@@ -28,3 +28,9 @@ unset rc
 
 . "$HOME/.cargo/env"
 export PATH=/home/ztz/.cargo/bin:$PATH
+
+. "$HOME/.local/share/../bin/env"
+
+# uv and uvx autocompletion
+eval "$(uv generate-shell-completion bash)"
+eval "$(uvx --generate-shell-completion bash)"

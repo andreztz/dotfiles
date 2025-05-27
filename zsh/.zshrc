@@ -157,6 +157,20 @@ fi
 
 eval "$(pyenv virtualenv-init -)"
 
+GIT_STASH_INDICATOR=""
+
+function check_git_stash() {
+    if git rev-parse --is-inside-work-tree &>/dev/null; then
+        local stash_count=$(git stash list 2>/dev/null | wc -l | tr -d ' ')
+        if [[ "$stash_count" -gt 0 ]]; then
+            GIT_STASH_INDICATOR=" ⚡${stash_count}"
+        else
+            GIT_STASH_INDICATOR=""
+        fi
+    else
+        GIT_STASH_INDICATOR=""
+    fi
+}
 
 # Define hooks
 # https://zsh.sourceforge.io/Doc/Release/Functions.html
@@ -166,6 +180,8 @@ precmd() {
 # Hook chpwd: É executado ao alterar o diretório corrente
 chpwd() {
     activate_virtualenv
+    check_git_stash
+    [ ! -z GIT_STASH_INDICATOR ] && echo $GIT_STASH_INDICATOR
 }
 
 . "$HOME/.cargo/env"

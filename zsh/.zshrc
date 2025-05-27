@@ -75,7 +75,7 @@ DISABLE_MAGIC_FUNCTIONS="true"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git gitignore docker-compose)
+plugins=(zsh-vi-mode git gitignore docker-compose)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -115,8 +115,7 @@ alias dotfiles="/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 alias set_dot_env="set -o allexport; source .env; set +o allexport"
 alias py="python"
 alias vim="nvim"
-
-
+alias ls="eza"
 
 # PATH
 # https://wiki.archlinux.org/index.php/zsh#Configuring_$PATH
@@ -146,16 +145,17 @@ function activate_virtualenv () {
     [ -d ".venv/$BASE_NAME" ] && hatch shell 2> /dev/null
 }
 
-# PYENV
-# Aponta para odiretorio de instalação do pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-# Verifica se o comando pyenv está disponivel no sistema
-if command -v pyenv 1>/dev/null 2>&1; then
- eval "$(pyenv init --path)" 
-fi
-
-eval "$(pyenv virtualenv-init -)"
+# # PYENV
+# # Aponta para odiretorio de instalação do pyenv
+# export PYENV_ROOT="$HOME/.pyenv"
+# export PATH="$PYENV_ROOT/bin:$PATH"
+# # Verifica se o comando pyenv está disponivel no sistema
+# if command -v pyenv 1>/dev/null 2>&1; then
+#  eval "$(pyenv init --path)" 
+# fi
+#
+# eval "$(pyenv virtualenv-init -)"
+#
 
 GIT_STASH_INDICATOR=""
 
@@ -188,7 +188,7 @@ chpwd() {
 
 
 # uv
-. "$HOME/.local/share/../bin/env"
+# . "$HOME/.local/share/../bin/env"
 # uv autocopletion
 eval "$(uv generate-shell-completion zsh)"
 # uvx autocompletion

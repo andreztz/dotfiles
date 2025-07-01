@@ -1,26 +1,30 @@
 # dotfiles
 
-## Meus dotfiles
+## Dependências
 
-Defina variáveis de ambiente no arquivo ~/.zshenv 
+- stow
+- git
+
+### Como instalar
+
+`stow -t ~ <package>`
+
+### Pós-instalação
+
+Defina variáveis de ambiente no arquivo `~/.zshenv` 
 
 ```
 # https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 OH_MY_ZSH_THEME=<NOME DO TEMA>
 ```
 
+
+```
 git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
-
-# Config Awesomewm
-
-```
-git clone https://github.com/vicious-widgets/vicious.git ~/.config/awesome/vicious
-rm -rf ~/.config/awesome/vicious/.git
 ```
 
 
-# Config tmux
-
+#### Configuração e inicialização do Tmux
 
 ```
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
